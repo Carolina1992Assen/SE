@@ -1,0 +1,281 @@
+ '''print('the best option would be the word: {0}\nWith a difference of: {1}\n\n\n'.format(highest_score[-1][1],
+                                                                                               highest_score[-1][0]),
+              file=sys.stderr)
+
+    print("\n\n\nEnter Y to see the tweets with the replacement term, enter Q to quit or enter a new query if "
+              "you wish to proceed.", file=sys.stderr)
+
+    for q in sys.stdin:
+        q = q.strip()
+        q = q.upper()
+        if q == 'Y':
+            if the_word == w1:
+                ids = words_index[the_word].keys() & words_index[w2].keys()
+                for item in ids:
+                    if bigram(words_index[the_word][item], words_index[w2][item]):
+                        print(docs[item][0:2])
+            elif the_word == w2:
+                 ids = words_index[w1].keys() & words_index[the_word].keys()
+                 for item in ids:
+                     if bigram(words_index[w1][item], words_index[the_word][item]):
+                        print(docs[item][0:2])
+            elif q == 'Q':
+                sys.exit(-1)
+
+        end_time = time.time()
+        print('\nprogram runtime:', end_time - start_time, file=sys.stderr)'''
+
+
+if __name__ == '__main__':
+    main()
+    
+    
+    #!/usr/bin/env python3
+
+# Author: Carlijn Assen
+# first run: nltk.download() after importing nltk and nltk.download('words')
+# and nltk.download('punkt')
+
+
+import sys
+import nltk
+import pickle
+from nltk import ngrams
+from nltk import punkt
+import numpy as np
+import re
+import string
+from collections import Counter
+import time
+
+
+def del_symbols(text):
+    result = re.sub(r"[()+-]", r"", text)
+    return result
+
+
+def del_emojis(text):
+    return text.encode('ascii', 'ignore').decode('ascii')
+
+
+def del_tw(text):
+    result = re.sub(r"(\s)https\w+", r"\1", text)
+    return result
+
+
+def del_rt(text):
+    result = re.sub(r"RT", "", text)
+    return result
+
+
+def del_punct(s):
+    result = s.translate(str.maketrans("", "", string.punctuation))
+    return result
+
+
+def ls(x, y):
+    if x == y:
+        return 0
+    elif len(x) == 0:
+        return len(y)
+    elif len(y) == 0:
+        return len(x)
+
+    lx = len(x) + 1
+    ly = len(y) + 1
+
+    d = np.zeros((lx, ly))
+
+    for i in range(len(d[0])):
+        d[0][i] = i
+    for j in range(len(d)):
+        d[j][0] = j
+
+    for i in range(1, lx):
+        for j in range(1, ly):
+            if x[i - 1] == y[j - 1]:
+                d[i, j] = min(
+                    d[i - 1, j] + 1,
+                    d[i - 1, j - 1],
+                    d[i, j - 1] + 1)
+
+            else:
+                d[i, j] = min(
+                    d[i - 1, j] + 1,
+                    d[i - 1, j - 1] + 1,
+                    d[i, j - 1] + 1)
+
+    return d[i][j]
+
+
+def bigram(l1, l2):
+    try:
+        it1 = iter(l1)
+     
+     
+     
+     
+     
+        it2 = iter(l2)
+
+        n1 = next(it1)
+        n2 = next(it2)
+
+        while True:
+            if n1 == (n2 - 1):
+                return True
+            else:
+                if n1 < (n2 - 1):
+                    n1 = next(it1)
+                else:
+                    n2 = next(it2)
+    except StopIteration:
+        return False
+
+
+def trigram():
+    docs = pickle.load(open('docs.pickle', 'rb'))
+    trigram_list = []
+    token_list = []
+    for key, value in docs.items():
+        tweet = value[-1]
+        text = del_emojis(tweet)
+        text = del_punct(text)
+        text = del_tw(text)
+        text = del_rt(text)
+        text = del_symbols(text)
+        text = text.lower()
+        tokens = text.split()
+        token_list.append(tokens)
+        trigrams = nltk.trigrams(tokens)
+        for gram in trigrams:
+            trigram_list.append(gram)
+    with open('trigrams.pickle', 'wb') as f:
+        pickle.dump(trigram_list, f)
+
+
+def main():
+    start_time = time.time()
+    docs = pickle.load(open('docs.pickle', 'rb'))
+    words_index = pickle.load(open('words_index.pickle', 'rb'))
+    trigrams = pickle.load(open('trigrams.pickle', 'rb'))
+
+    print("Hello, please enter a query consisting of two words, if the words are reconized\nAll the tweets where the "
+          "first word directly precedes the second will be shown\nIf one of the two words is not recognized, "
+          "this program will find a proper replacement, with the usage of levenshtein distance among other "
+          "implementations.\n", file=sys.stderr)
+    print("Enter words here (seperated by space) and press enter: ", file=sys.stderr)
+
+    for line in sys.stdin:
+        line = line.strip()
+        line = line.split()
+        w1 = line[0]
+        w2 = line[1]
+
+        occ_lev = {}
+        to_compare = []
+        lev_dict = {}
+
+        ids = words_index[w1].keys() & words_index[w2].keys()
+        if w1 in words_index and w2 in words_index:   
+            for item in ids:
+                if bigram(words_index[w1][item], words_index[w2][item]):
+                    print(docs[item][0:2])
+
+        if w1 not in words_index and w2 not in words_index:
+            print('both words are not reconized, Please try again.\n', file=sys.stderr)
+
+        if w1 not in words_index and w2 in words_index:
+            print("The first word is not recognized, searching for a replacement....", file=sys.stderr)
+            for item in trigrams:
+                if w2 == item[1]:
+                    to_compare.append(item[0])
+                elif w2 == item[2]:
+                    to_compare.append(item[1])
+            to_compare = Counter(to_compare)
+            the_word = w1
+
+        elif w2 not in words_index and w1 in words_index:
+            print("The second word is not recognized, searching for a replacement....", file=sys.stderr)
+            for it in trigrams:
+                if w1 == it[0]:
+                    to_compare.append(it[1])
+                elif w1 == it[1]:
+                    to_compare.append(it[2])
+            to_compare = Counter(to_compare)
+            the_word = w2
+
+        high_number = 100000  # set a number which is very unlikely to be reached in levensthein distance
+        for word, occ in to_compare.items():
+            if ls(the_word, word) < high_number:
+                high_number = ls(the_word, word)
+        for word, occ in to_compare.items():
+            if ls(the_word, word) == high_number:
+                lev_dict[word] = [high_number, occ]
+
+        print('\n\npossible replacements for {0}:\n'.format(the_word), file=sys.stderr)
+
+        for k, v in lev_dict.items():
+            print('word: {0}\nlevenshtein distance: {1}'.format(k, v[0]), file=sys.stderr)
+            print('occurences = ', v[1], '\n\n', file=sys.stderr)
+            occ_lev[k] = v[1] - v[0]
+            
+        print('The bigger the difference between occurences\nand levensthein distance\nthe better choice the word becomes as a replacement.\n\nSide note: occurances are calculated using trigrams\nIt means the amount of occurances of the surrounding words.\n\n', file=sys.stderr)
+        
+        maxx_dist = max(occ_lev.values())
+        maxx_distances = [(k,v) for k,v in occ_lev.items() if v == maxx_dist]
+      
+        if len(maxx_distances) == 1:
+            print('the best replacement option would be the word: {0}\nWith a difference of: {1}\n'.format(maxx_distances[0][0], maxx_distances[0][1]), file=sys.stderr)
+        else:
+            print('there are multiple words found, to be considered the best replacement\nthey are listed below:', file=sys.stderr)
+            for item in maxx_distances:
+                print('word: {0}\ndifference: {1}\n'.format(item[0], item[1]))
+                      
+              
+        print("\nEnter Y to see the tweets with a calculated replacement term, enter Q to quit.", file=sys.stderr)
+
+        for q in sys.stdin:
+            q = q.strip()
+            q = q.upper()
+            if q == 'Y':
+                for word in maxx_distances:
+                    word = word[0]
+                    if the_word == w1:
+                        ids = words_index[word].keys() & words_index[w2].keys()
+                       
+                        for item in ids:
+                            try:
+                                if bigram(words_index[word][item], words_index[w2][item]):
+                                    print(docs[item][0:2])
+                            except KeyError as e:
+                                e = 'No tweets can be found.'
+                                print(e)
+                    elif the_word == w2:
+                         ids = words_index[word].keys() & words_index[w1].keys()
+                         for item in ids:
+                            try:
+                                if bigram(words_index[w1][item], words_index[word][item]):
+                                    print(docs[item][0:2]) 
+                            except KeyError as e:
+                                e = 'No tweets can be found.'
+                                print(e)
+                                
+                print('\nEnter C to continue or enter Q to quit.')
+                
+            if q == 'C':
+                main()                    
+            elif q == 'Q':
+                sys.exit(-1)
+
+            end_time = time.time()
+            print('\nprogram runtime:', end_time - start_time, file=sys.stderr)
+
+
+      
+
+                end_time = time.time()
+                print('\nprogram runtime:', end_time - start_time, file=sys.stderr)
+
+if __name__ == '__main__':
+    main()

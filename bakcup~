@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+
+import pickle
+import sys
+
+from collections import defaultdict
+
+def cs(word, lib, value):
+    if word not in lib:
+        lib[word] = [value]
+    else:
+        lib[word].append(value)
+    
+
+def main():
+    docs = pickle.load(open('docs.pickle','rb'))
+    w1_d = defaultdict(list)
+    for line in sys.stdin:
+        line = line.strip()
+        line = line.split()
+        w1, w2 = line[0], line[1] 
+        
+        for k, v in docs.items():
+            if w1 or w2 in v:
+                if w1 and w2 in v:
+                    if w1 not in w1_d:
+                        w1_d[w1] = [k]
+                    else:
+                       w1_d[w1].append(k)
+                if w1 not in v:
+                    if w2 not in w1_d:
+                        w1_d[w2] = [k]
+                    else:
+                        w1_d[w2].append(k)
+                if w2 not in v:
+                    if w1 not in w1_d:
+                        w1_d[w1] = [k]
+                    else:
+                        w1_d[w1].append(k)
+               
+        
+                
+                            
+                              
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,6 @@
+def main():
+    for line in sys.stdin:
+        line = line.strip()
+        line = line.split()
+        line[0], line[1] = w1, w2
+        print(line[0], line[1])

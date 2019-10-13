@@ -1,0 +1,30 @@
+            
+    #tweet_len = len(terms)
+    #len_database = len(database) 
+    #list of tweets you can make by all keys of nested dic        
+    '''for k, v in database.items():
+        database[k].insert(1, total_docs)
+        database[k].insert(-2, len(database[k][-1]))
+        database[k].update({'tweet_len': len(database[k][-1]}'''
+        
+        
+        
+           
+    '''print(len(data.keys()))
+    for v in data[w]:
+        tf = v[0] / v1[3] occ in tweet/ len tweet
+        df = occurences of word in doc
+        idf = np.log(v1[3] / df) len_doc/ df
+        tf_idf = tf * idf
+        return(tf_idf)'''
+        
+        
+        
+        
+        
+     '''tf = data[w][0] / data[w][1]
+            df = len(v)
+            idf = np.log(total_docs/df)
+            tf_idf = tf * idf
+    
+    return tf_idf'''

@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+# Author: Carlijn Assen
+
+import pickle
+import sys
+import math
+import time
+import numpy as np
+from collections import defaultdict
+from collections import Counter
+from itertools import combinations
+
+
+
+def tf_idf(w1, w2):
+    docs = pickle.load(open('docs.pickle', 'rb'))
+    words_index = pickle.load(open('words_index.pickle', 'rb'))
+    score_index = {}
+    tf_idf_tweet_dict = {}
+    if w1 in words_index or w2 in words_index:
+        total_amount = 0
+        idds = []
+        if w1 not in words_index and w2 in words_index:
+            total_amount = total_amount + len(words_index[w2])
+            idds = idds + list(words_index[w2].keys())
+        elif w2 not in words_index and w1 in words_index:
+            total_amount = total_amount + len(words_index[w1])
+            idds = idds + list(words_index[w1].keys())
+        elif w1 in words_index and w2 in words_index:
+            total_amount = total_amount + len(words_index[w1]) + len(words_index[w2])
+            idds = idds + list(words_index[w1].keys())
+            idds = idds + list(words_index[w2].keys())
+        
+        for item in idds:
+            
+            words = docs[item][2].split()
+            set_w = set(words)
+            tf = len(set_w) / len(words)
+            df = total_amount - len(set(idds))
+            idf = np.log(total_amount / (df + 1))
+            tf_idf = tf * idf
+            if math.isnan(tf_idf):
+                tf_idf = 0
+            else:
+                tf_idf = round(tf_idf, 3)
+            tf_idf_tweet_dict[tf_idf] = (docs[item][0], docs[item][1])
+        
+
+    with open('tf_idf_tweet_dict.pickle', 'wb') as f:
+        pickle.dump(tf_idf_tweet_dict, f)
+
+
+
+def bigrams():
+    bigrams = []
+    words = []
+    all_combs = []
+    docs = pickle.load(open('docs.pickle', 'rb'))
+    words_index = pickle.load(open('words_index.pickle', 'rb'))
+    all_words = [item[2].split() for item in docs.values()]
+    print(len(all_words))
+    for item in all_words:
+        n = len(item) - 1
+        for i in range((n - 1), 0, -1):
+            
+            n = n - 1
+            if n == i:
+                None
+            else:
+
+    print(len(all_combs))
+            
+        
+            
+        
+   
+    '''for i in range(len(words) - 1): 
+        for item in n:
+            print(n)
+        all_combinations.append((words[i], words[item]))
+    print(all_combinations)
+  
+    with open('all_combinations.pickle', 'wb') as f:
+        pickle.dump(all_combinations, f)'''
+    
+
+bigrams()
+
+

@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+# Author: Carlijn Assen
+
+import pickle
+import sys
+import math
+import time
+import numpy as np
+from collections import defaultdict
+from collections import Counter
+
+
+def main():
+    docs = pickle.load(open('docs.pickle', 'rb'))
+    words_index = pickle.load(open('words_index.pickle', 'rb'))
+
+    for line in sys.stdin:
+
+        line = line.strip()
+        [w1, w2] = line.split()
+
+        if w1 in words_index or w2 in words_index:
+            total_amount = 0
+            idds = []
+            dictt = {}
+            if w1 not in words_index and w2 in words_index:
+                total_amount = total_amount + len(words_index[w2])
+                idds = idds + list(words_index[w2].keys())
+            elif w2 not in words_index and w1 in worsd_index:
+                total_amount = total_amount + len(words_index[w1])
+                idds = idds + list(words_index[w1].keys())
+            elif w1 in words_index and w2 in words_index:
+                total_amount = total_amount + len(words_index[w1]) + len(words_index[w2])
+                idds = idds + list(words_index[w1].keys())
+                idds = idds + list(words_index[w2].keys())
+            elif w1 not in words_index and w2 not in words_index:
+                print("Please enter different terms, these cant be found.\n")
+                main()
+            else:
+                print("Something went wrong please enter two search terms.\n")
+                main()
+
+            print('\nBelow you can find information about tweets containing one or both of the search terms:\n\n{0:>23} | {1}\n\nNamely:\n1. The tf-idf score.\n2. The user of the specific tweet\n3. the text of that tweet.\n\n'.format(w1, w2))
+            time.sleep(2)
+            
+            print(idds)
+
+            for item in idds:
+     
+                words = docs[item][2].split()
+                set_w = set(words)
+                tf = len(set_w) / len(words)
+                df = total_amount - len(set_w)
+                idf = np.log(total_amount / (df + 1))
+                tf_idf = tf * idf
+                if math.isnan(tf_idf):
+                    tf_idf = 0
+                dictt[tf_idf] = (docs[item][0], docs[item][1])
+            for key in sorted(dictt):
+                print('tf_idf score = {0}\n'.format(key))
+                print('User = {0}\n'.format(dictt[key][0]))
+                print('text = {0}\n'.format(dictt[key][1]))
+            time.sleep(1.5)
+
+
+if __name__ == '__main__':
+    main()
+

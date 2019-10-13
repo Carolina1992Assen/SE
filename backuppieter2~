@@ -1,0 +1,76 @@
+# Author: Carlijn Assen
+
+import pickle
+import sys
+import math
+import time
+import itertools
+import numpy as np
+from collections import defaultdict
+from collections import Counter
+from itertools import permutations
+
+
+def tf_idf(w1, w2, dictorhighestscore):
+    docs = pickle.load(open('docs.pickle', 'rb'))
+    words_index = pickle.load(open('words_index.pickle', 'rb'))
+    score_index = {}
+    tf_idf_tweet_dict = {}
+    high_scores = []
+    if w1 in words_index or w2 in words_index:
+        total_amount = 0
+        w1_count = 0
+        w2_count = 0
+        idds = []
+        if w1 not in words_index and w2 in words_index:
+            total_amount = total_amount + len(words_index[w2])
+            idds = idds + list(words_index[w2].keys())
+        elif w2 not in words_index and w1 in words_index:
+            total_amount = total_amount + len(words_index[w1])
+            idds = idds + list(words_index[w1].keys())
+        elif w1 in words_index and w2 in words_index:
+            total_amount = total_amount + len(words_index[w1]) + len(words_index[w2])
+            idds = idds + list(words_index[w1].keys())
+            idds = idds + list(words_index[w2].keys())
+        
+        for item in idds:
+            
+            words = docs[item][2].split()
+            w1_count = w1_count + words.count(w1)
+            w2_count = w2_count + words.count(w2)
+            words_found = w1_count + w2_count
+            if words_found == 1:
+                swf = 1
+            else:
+                swf = 2
+                
+            tf = swf / words_found
+            df = swf / len(words)
+            idf = np.log(len(docs.keys()) / (df + 1))
+            tf_idf = tf * idf
+            if math.isnan(tf_idf):
+                tf_idf = 0         
+            else:
+                tf_idf = round(tf_idf, 3)
+                
+                
+            if dictorhighestscore == 'highestscore':
+                score = tf_idf
+                if tf_idf > score:
+                    score = tf_idf
+                    return score
+                    
+                    
+            elif dictorhighestscore == 'dict':
+                tf_idf_tweet_dict[tf_idf] = (docs[item][0], docs[item][1])
+        tf_idf_tweet_dict = sorted(tf_idf_tweet_dict)
+        return tf_idf_tweet_dict
+
+
+
+
+
+    
+
+
+

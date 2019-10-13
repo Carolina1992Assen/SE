@@ -1,0 +1,30 @@
+ '''print('the best option would be the word: {0}\nWith a difference of: {1}\n\n\n'.format(highest_score[-1][1],
+                                                                                               highest_score[-1][0]),
+              file=sys.stderr)
+
+    print("\n\n\nEnter Y to see the tweets with the replacement term, enter Q to quit or enter a new query if "
+              "you wish to proceed.", file=sys.stderr)
+
+    for q in sys.stdin:
+        q = q.strip()
+        q = q.upper()
+        if q == 'Y':
+            if the_word == w1:
+                ids = words_index[the_word].keys() & words_index[w2].keys()
+                for item in ids:
+                    if bigram(words_index[the_word][item], words_index[w2][item]):
+                        print(docs[item][0:2])
+            elif the_word == w2:
+                 ids = words_index[w1].keys() & words_index[the_word].keys()
+                 for item in ids:
+                     if bigram(words_index[w1][item], words_index[the_word][item]):
+                        print(docs[item][0:2])
+            elif q == 'Q':
+                sys.exit(-1)
+
+        end_time = time.time()
+        print('\nprogram runtime:', end_time - start_time, file=sys.stderr)'''
+
+
+if __name__ == '__main__':
+    main()

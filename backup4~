@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+
+import pickle
+import sys
+import math 
+import numpy as np 
+
+from collections import defaultdict
+from collections import Counter 
+
+
+
+def tdIdf(sen):
+    
+    tf_idf = {}
+    for i in range(N):
+        tokens = processed_text[i]
+        counter = Counter(tokens + processed_title[i])
+        for token in np.unique(tokens):
+            tf = counter[token]/words_count
+            
+            idf = np.log(N/(df+1))
+            tf_idf[doc, token] = tf*idf
+
+    return tf_idf
+        
+        
+
+    
+
+def main():
+    docs = pickle.load(open('docs.pickle','rb'))
+    words_index = pickle.load(open('words_index.pickle','rb'))
+    new_index = {}
+    n = 0
+    b = 0
+    for line in sys.stdin:
+                                                                                                                                    
+     
+        try:
+            line = line.strip()
+            [w1, w2] = line.split() 
+            cw1 = 0
+            cw2 = 0
+            if w1 in words_index or w2 in words_index:
+                lenn = 0
+                if w1 in line:
+                    cw1 = cw1 + 1
+                if w1 in line:
+                    cw2 = cw2 + 1
+                n = len(words_index[w1])
+                new_index[w1] = (n)
+                t = len(words_index[w2])
+                new_index[w2] = (t)
+                total_amount = n + t
+                tf = Counter
+                
+                idds = words_index[w1]
+                for item in idds:
+                    words = docs[item][2].split()
+                    set_w = set(words)
+                    tf = set_w / words
+                    
+                    idf = np.log(total_amount/(df+1))
+                    tf_idf[doc, token] = tf*idf
+                                            
+                    
+                
+
+        except ValueError:
+            print('each line should contain two search terms', file=sys.stderr)
+            
+        print(new_index.items())
+        print(total_amount)
+        
+         
+            
+                
+                
+        
+        
+               
+        
+                
+                            
+                              
+if __name__ == '__main__':
+    main()
+    

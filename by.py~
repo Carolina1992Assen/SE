@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+# Author: Carlijn Assen
+
+import sys
+import pickle 
+
+from itertools import permutations
+
+   
+def highest_score():
+
+
+    
+    all_words = pickle.load(open("words_index.pickle", "rb"))
+    scores = pickle.load(open("data.pickle", "rb"))
+    
+    perms_dict = {}
+    
+    words = list(all_words.keys())
+    perms = (permutations(words, 2))
+    
+    for p in perms:
+        w1 = p[0]
+        w2 = p[1]
+        
+        l1 = scores.get(w1, {})
+        l2 = scores.get(w2, {})
+        print(l1)
+      
+  
+
+            
+highest_score()
+
+
+

@@ -1,0 +1,41 @@
+import sys
+import numpy as np 
+from pprint import pprint
+def cost(a, b): #substitutuion
+    cost = 0
+    if a == b:
+        cost = 0
+    else:
+        cost = 1
+    return cost
+
+def ls(x, y):
+   
+    
+    for a in range(len(x) + 1):
+        for b in range(len(y) + 1):
+            c = cost(a, b)
+            sub = c 
+            insdel_1 = (x[a - 1][b] + 1)
+            insdel_2 = (y[b - 1][a] + 1)
+            print(min(sub, insdel_1, insdel_2))
+            
+             
+        
+    '''x and y are strings
+    a and b are symbols
+    dist(x,y)
+    distx(xa, y)
+    dist(x,yb)
+    
+    cost(a,b): 0 if a == b; 1 otherwise
+    
+    dist(x,y) + cost(a,b) (substitution)
+
+    dist(xa,y) + 1 (insdel)
+    
+    dist(x,yb) + 1 (insdel)
+    
+    take the mininum'''
+
+ls('was', 'wolk')

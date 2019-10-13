@@ -1,0 +1,13 @@
+
+
+highest tdidf = 0 if higher than that number see if it is faster
+
+#print(tf_idf('vis', 'haring', 'highestscore'))
+
+
+tf_idf('vis', 'zalm', 'highestscore')
+
+
+td_idf_score = tf_idf(i[0], i[1], 'highestscore')
+    print(td_idf_score)
+

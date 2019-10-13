@@ -1,0 +1,66 @@
+3. 
+
+Yes in the following tweet:
+Wat is het toch leuk om te doen. Elke vrijdagmorgen als de zon schijnt bel ik drie mensen random uit mijn telefoon om ze een zonnige en succesvolle vrijdag toe te wensen. In geval van Jan Henk Oosterkamp, Rene Salman en Gerard Kamphuis gaat dat vandaag zeker lukken.
+
+my search terms:
+wolken and zon
+
+conclusion:
+Only zon can be found in this tweet , and it's tf_idf score is very high, namely:
+0.9929764916807915
+
+
+4.
+
+search_terms = tf_idf score = 1.8279762006277187
+
+User = NPOFocus
+
+text = Er steeds meer mensen die geen of minder vaak vis en vlees eten. Is het gezonder, is het beter voor de wereld? Lees en bekijk: https://t.co/W9OavRHWpW #vleestaks #standpunt @SpraakmakersOp1
+
+
+
+
+
+
+tf_idf score = 2.61549746053396
+
+User = harrydesert
+
+text = VS zet Canada het mes op de keel in handelsoverleg @KanaalZ,,,,,, Trump heeft de troeven in handen,, een expert op gebied van business,,
+
+search_terms: mes en vork
+
+
+
+
+tf_idf score = 0.8343756667077125
+
+User = Cat_Gaming_
+
+text = De herfst komt eraan!11
+
+herf
+
+python3 2.py
+vis vogel
+
+Below you can find information about tweets containing one or both of the search terms:
+
+                    vis | vogel
+
+Namely:
+1. The tf-idf score.
+2. The user of the specific tweet
+3. the text of that tweet.
+
+
+2.
+
+
+tf_idf score = 1.483126589701948
+
+User = AndSimonSaid
+
+text = @troetje @Annala0805 @lobidabasi Op je hamburger. Bij vis.

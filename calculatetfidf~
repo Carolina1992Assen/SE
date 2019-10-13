@@ -1,0 +1,21 @@
+
+            
+            '''tf1 = v1[6] / v1[2]
+            df1 = v1[2] / v1[1]
+            idf1 = np.log(v1[1] / df1)
+            tf_idf1 = tf * idf
+            
+            tf2 = v2[6] / v2[2]
+            df2 = v1[2] / v2[1]
+            idf2 = np.log(v1[1] / df2)
+            tf_idf2 = tf * idf
+        return(tf_idf1 * tf_idf2)
+    elif len(query) == 1:
+        w = query.rstrip()
+        for v in data[w]:
+            tf = v[6] / v1[2]
+            df = v[2] / v[1]
+            idf = np.log(v1[1] / df)
+            tf_idf = tf * idf
+        return(tf_idf)'''
+   

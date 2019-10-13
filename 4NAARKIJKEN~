@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+
+import pickle
+import sys
+import math 
+
+from collections import defaultdict
+from collections import Counter 
+import numpy as np
+
+'''Programming exercise: take the Twitter-search-engine from the last few weeks as a starting point (but without the spell correction modules!). Implement a variant which takes two search terms and then returns all tweets which match at least one of the search terms. Compute the tf-idf score of each document. Order the returned documents by tf-idf score. Each line you print should contain the tfidf score, the twitter user, and the text of the tweet.
+
+    creation of data-structure: you need to represent, for each term, in how many documents that term occurs. It is ok to use the length of the posting list for this purpose.
+    you also need to represent the overall number of tweets
+    you need to represent how often a word occurs in a tweet 
+
+Note: the idf value of a term that does not exist in the data at all is 0.
+Question: can you come up with a query, such that the highest scoring document only contains one of the search terms?
+Question: come up with a query for which the best document obtains the highest possible tfidf score in this dataset. For the purpose of this question, we disallow queries containing two identical search terms. '''
+        
+
+    
+
+def main():
+    docs = pickle.load(open('docs.pickle','rb'))
+    words_index = pickle.load(open('words_index.pickle','rb'))
+    new_index = {}
+    n = 0
+    b = 0
+    for line in sys.stdin:
+                                                                                                                                    
+        
+        try:
+            line = line.strip()
+            [w1, w2] = line.split() 
+            cw1 = 0
+            cw2 = 0
+            if w1 in words_index or w2 in words_index:
+                lenn = 0
+                if w1 in line:
+                    cw1 = cw1 + 1
+                if w1 in line:
+                    cw2 = cw2 + 1
+                    
+                n = len(words_index[w1])
+                #new_index[w1] = n
+                                        #file.stderr bij format???
+                
+                t = len(words_index[w2])
+                #new_index[w2] = t
+                #wel of (overbodige) dictionary?
+               
+                
+                total_amount = n + t
+              
+                                  
+                idds = words_index[w1]
+                for item in idds:
+                    words = docs[item][2]
+                    set_w = set(words)
+                    tf = len(set_w) / len(words)
+                    df = total_amount - len(set_w)
+                    idf = np.log(total_amount/(df+1))
+                    tf_idf = tf*idf
+                    print('tf-dif score = {0}'.format(tf_idf))
+                    print('user = {0}'.format(docs[item][0]))
+                    print('text = {0}'.format(words))
+                    
+                
+                '''Each line you print should contain the tfidf score, the twitter user, and the text of the tweet.
+
+    creation of data-structure: you need to represent, for each term, in how many documents that term occurs. It is ok to use the length of the posting list for this purpose.
+    you also need to represent the overall number of tweets
+    you need to represent how often a word occurs in a tweet'''
+                
+                
+                                      
+                    
+                
+
+        except ValueError:
+            print('each line should contain two search terms', file=sys.stderr)
+            
+      
+         
+            
+                
+                
+        
+        
+               
+        
+                
+                            
+                              
+if __name__ == '__main__':
+    main()
+    

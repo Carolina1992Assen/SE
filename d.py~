@@ -1,0 +1,56 @@
+import pickle
+from pieter import tf_idf
+from nltk.tokenize import TweetTokenizer , RegexpTokenizer
+from itertools import permutations
+import re
+import numpy as np
+import math
+
+
+def del_symbols (text) :
+    result = re.sub(r"[()+-.../#]" , r"" , text)
+    return result
+
+
+def del_emojis (text) :
+    return text.encode('ascii' , 'ignore').decode('ascii')
+
+
+def del_tw (text) :
+    result = re.sub(r"https\S+" , "" , text)
+    return result
+
+
+def del_rt (text) :
+    result = re.sub(r"RT" , "" , text)
+    return result
+
+
+def del_punct (s) :
+    result = s.translate(str.maketrans("" , "" , string.punctuation))
+    return result
+
+
+def td () :
+    docs = pickle.load(open('docs.pickle' , 'rb'))
+    words_index = pickle.load(open('words_index.pickle' , 'rb'))
+    tw_tok = TweetTokenizer(preserve_case = False , strip_handles = True , reduce_len = True)
+    all_perms = []
+    w1_count = 0
+    w2_count = 0
+    for item in docs.values() :
+        words = item[2]
+        words = del_emojis(words)
+        words = del_tw(words)
+        words = del_rt(words)
+        words_ = del_symbols(words)
+        words = tw_tok.tokenize(words)
+        perms = (permutations(words , 2))
+
+        for p in perms :
+            w1 = str(p[0])
+            w2 = str(p[1])
+            terms = (w1, w2)
+        print(terms)
+        
+td()

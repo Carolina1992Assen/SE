@@ -1,0 +1,84 @@
+import sys
+import numpy as np 
+from pprint import pprint
+
+
+def is_vowel(letter):
+    if letter in 'aeiou':
+        return True
+    else:
+        return False
+
+def ls(x, y):
+    if x == y:
+        return 0
+    elif len(x) == 0:
+        return len(y)
+    elif len(y) == 0:
+        return len(x)
+
+    lx = len(x) + 1
+    ly = len(y) + 1
+
+    d = np.zeros((lx, ly))
+
+    for i in range(len(d[0])):
+        d[0][i] = i
+    for j in range(len(d)):
+        d[j][0] = j
+
+    for i in range(1, lx):
+        for j in range(1, ly):
+            n = 0
+        
+            deletion = d[i - 1, j] + n
+            insertion = d[i, j - 1] + n
+            substitution = d[i - 1, j - 1] + n
+            
+          
+            if min(deletion, substitution, insertion) == deletion:
+                if is_vowel(y[j -1]):
+                    n = 0.5 
+                else:
+                    n = 1
+            elif min(deletion, substitution, insertion) == insertion: 
+                if is_vowel(y[j -1]):
+                    n = 0.5 
+                else:
+                    n = 1
+            elif min(deletion, substitution, insertion) == substitution:
+                if x[i - 1] == y[j - 1]:
+                    n = 0
+                else:
+                    n = 1
+   
+            deletion = d[i - 1, j] + n
+            insertion = d[i, j - 1] + n
+            substitution = d[i - 1, j - 1] + n
+          
+         
+            d[i, j] = min(
+                deletion,
+                substitution,
+                insertion) 
+             
+
+    return d[i][j]
+
+def main():
+    t = 0
+    for line in sys.stdin:
+        occ_list = []
+        ls_list = []
+        line = line.strip()
+        line = line.split()
+        w1 = line[0]
+        w2 = line[1]
+
+        print(ls(w1, w2),w1, w2)
+       
+        
+        
+        
+if __name__=='__main__':
+    main()

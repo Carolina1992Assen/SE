@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+# Author: Carlijn Assen
+
+import pickle
+import sys
+import math
+import time
+import numpy as np
+from collections import defaultdict
+from collections import Counter
+
+
+def lala():
+    docs = pickle.load(open('docs.pickle', 'rb'))
+    words_index = pickle.load(open('words_index.pickle', 'rb'))
+
+    for line in sys.stdin:
+        
+        line = line.strip()
+        [w1, w2] = line.split()
+        count_docs = 0
+        term_document_ratio = 0
+        for item in docs:
+            count_docs += 1
+            words = docs[item][2].split()
+            if w1 in words or w2 in words:
+                term_document_ratio += 1
+                w_occ = words.count(w1 and not w2) + words.count(w2 and not w1) + words.count(w2 and w1)
+                print(w_occ)
+lala()
+                
+                    
+            
+                
+                
+            
+       
+           
+
+
+
+
+
+

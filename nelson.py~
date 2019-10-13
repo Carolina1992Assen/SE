@@ -1,0 +1,31 @@
+import sys
+def nott(el, l):
+    el_list = []
+    if el not in l:
+        el_list.append(el)
+    return(el_list)
+        
+def takeSecond(elem):
+
+    return elem[1]
+    
+def main():
+    index = {}
+    for line in sys.stdin:
+        line = line.rstrip()
+        line = line.split('\t')
+        words = line[3].split(' ')
+    for i in range(len(words)):
+        if words[i] in index:
+            index[words[i]].append([nott(line[0], words[i]), i])
+         
+        else:
+            index[words[i]] = [nott(line[0],words[i]), i]
+    for key, value in index.items():
+        print('{0}     {1})'.format(key, value))
+
+
+
+
+if __name__ == '__main__':
+    main()

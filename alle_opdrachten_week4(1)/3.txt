@@ -1,0 +1,13 @@
+3. 
+
+Yes in the following tweet:
+Wat is het toch leuk om te doen. Elke vrijdagmorgen als de zon schijnt bel ik drie mensen random uit mijn telefoon om ze een zonnige en succesvolle vrijdag toe te wensen. In geval van Jan Henk Oosterkamp, Rene Salman en Gerard Kamphuis gaat dat vandaag zeker lukken.
+
+my search terms:
+wolken and zon
+
+conclusion:
+Only zon can be found in this tweet , and it's tf_idf score is high, namely:
+0.9929764916807915
+
+
